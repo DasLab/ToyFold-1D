@@ -18,9 +18,10 @@ N = length( sequence );
 
 [x,p,is_chainbreak,E] = get_conformations('',sequence,params);
 
+set(gcf,'pos',[ 94   382   508   453])
 clf; 
 subplot(1,2,1); 
-draw_conformations(x,p,8,sequence,E);
+draw_conformations(x,p,8,sequence,E,is_chainbreak);
 
 subplot(1,2,2);
 if calc_m2; subplot(2,2,2); end

@@ -25,14 +25,21 @@ You should get something like:
 ```
 params = get_default_energy_parameters()
 ```
+should give 
+params = 
+```
+  struct with fields:
 
+    epsilon: -2
+      delta: 1
+```
 * If we strengthen base pairs and penalize bending more, we get a more well-defined structure:
 
 ```
 params = get_default_energy_parameters();
 params.epsilon = -3;
 params.delta = 2;
-analyze_sequence('CGAAACCCGAGGU');
+analyze_sequence('CGAAACCCGAGGU',params);
 ```
 
 ![analyze_sequence_example_output_strongparams.png](assets/analyze_sequence_example_output_strongparams.png)
@@ -42,10 +49,14 @@ analyze_sequence('CGAAACCCGAGGU');
 ``` 
 analyze_sequence('CCAAAGGGGACC');
 ```
+![analyze_sequence_example_output_degeneratepseudoknot.png](assets/analyze_sequence_example_output_degeneratepseudoknot.png)
+
  Or one that takes advantage of 'lowercase' perfect matches to get the best possible pseudoknot:
 ``` 
 analyze_sequence('abXXXcdbaXdc');
 ```
+![analyze_sequence_example_output_perfectpseudoknot.png](assets/analyze_sequence_example_output_perfectpseudoknot.png)
+
  
 * Some functionality is set up to enumerate over all sequences that are compatible with a target secondary structure, i.e., design. Give it a shot with a hairpin:
 
@@ -66,7 +77,7 @@ enumerative_design( '((...))','AWWWWWW' )
 
 Note that its harder to find a good design here due to lots of misfolds. Also, interestingly, although the best design is ranked by p(target) its dot plot looks 'messier' than the worst design. An interesting next step might be to rank by ensemble defect or similar.
 
-* And you can design over pseudoknots too!
+* And you can design over pseudoknots too! Though the calculation becomes unwieldy for long sequences...
 
 ```
 enumerative_design( '((..[)).]' )

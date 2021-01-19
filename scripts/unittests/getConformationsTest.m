@@ -1,85 +1,84 @@
 %%
-[x,d] = get_conformations('.....');
+[x] = get_conformations('.....');
 assert( size(x,1) == 5 );
-assert( size(x,2) == 2^4);
+assert( size(x,2) == 2^3);
 
-[x,d,p] = get_conformations('((.))');
+[x,p] = get_conformations('((.))');
 assert( size(x,1) == 5 );
 assert( size(x,2) == 1);
-num_bends = score_bends( d );
+num_bends = score_bends( x );
 assert( all( num_bends == [1]) );
-draw_conformations( x, d, p);
+draw_conformations( x, p);
 
-[x,d] = get_conformations('(...)');
+[x] = get_conformations('(...)');
 assert( size(x,1) == 5 );
 assert( size(x,2) == 3 );
-num_bends = score_bends( d );
-assert( all( num_bends == [1,3,3]) );
+num_bends = score_bends( x );
+assert( all( num_bends == [1,2,3]) );
 
-[x,d,p] = get_conformations( '(((...)))' );
-num_bends = score_bends( d );
+[x,p] = get_conformations( '(((...)))' );
+num_bends = score_bends( x );
 assert( all( num_bends == [1,3,3]) );
 draw_conformations( '(((...)))' );
 
-
-[x,d] = get_conformations('.((...))' );
+[x] = get_conformations('.((...))' );
 assert( size(x,1) == 8 );
 assert( size(x,2) == 6 );
 
-[x,d] = get_conformations('(( ))' );
+%% 
+% Chainbreaks
+[x] = get_conformations('(( ))' );
 assert( size(x,1) == 4 );
 assert( size(x,2) == 1 );
 
-[x,d] = get_conformations('.( )' );
+[x] = get_conformations('.( )' );
 assert( size(x,1) == 3 );
-assert( size(x,2) == 2 );
+assert( size(x,2) == 1 );
 
-[x,d] = get_conformations('(. )' );
+[x] = get_conformations('(. )' );
 assert( size(x,1) == 3 );
-assert( size(x,2) == 2 );
+assert( size(x,2) == 1 );
 
-[x,d] = get_conformations('( .)' );
+[x] = get_conformations('( .)' );
 assert( size(x,1) == 3 );
 assert( size(x,2) == 2 );
 
 %%
 % test motif expansion
 % 3-way junction
-[x,d] = get_conformations( '(.( )..( )....)' );
+[x] = get_conformations( '(.( )..( )....)' );
 assert( size(x,2)  == 126);
 
 % secondary structure harboring 3 way junction and other motifs.
 [x,d] = get_conformations( '..((.((..((...)))..)..(((...)))....))' );
-assert( size(x,2)  == 4*126*3*3*3*3);
+%assert( size(x,2)  ==   4*126*12*3*3*3 );
+assert( size(x,2)  == 2*2*126*4*3*3*3*3 );
 
 %%
 % enumerate conformations for a sequence
-[x,d,p] = get_conformations( '','NNN' );
+[x,p] = get_conformations( '','NNN' );
 assert( size(x,1) == 3 );
-assert( size(x,2) == 5 );
+assert( size(x,2) == 3 );
 % look for hairpin as 'best' conformation
 assert( all( x(:,1) == [0,1,0]') );
-assert( all( d(:,1) == [1,1,-1]') );
 assert( all( p(:,1) == [3,0,1]') );
 
-[x,d,p] = get_conformations( '','AAA' );
+[x,p] = get_conformations( '','AAA' );
 assert( size(x,1) == 3 );
-assert( size(x,2) == 4 );
+assert( size(x,2) == 2 );
 assert( all( p(:) == 0 ) );
 
-[x,d,p] = get_conformations('','UAUUA');
+[x,p] = get_conformations('','UAUUA');
 assert( size(x,1) == 5 );
 % look for hairpin as 'best' conformation
 assert( all( x(:,1) == [0,1,2,1,0]') );
-assert( all( d(:,1) == [1,1,1,-1,-1]') );
 assert( all( p(:,1) == [5,4,0,2,1]') );
-assert( size(x,2) == 28 );
+assert( size(x,2) == 23 );
 
 
 % pseudoknot
-[x,d,p] = get_conformations( '((..[)).]' );
-assert( all( x == [0,1,2,3,2,1,0,1,2]' ) );
-assert( all( d == [1,1,1,1,-1,-1,-1,1,1]' ) );
-assert( all( p == [7,6,0,0,9,2,1,0,5]' ) );
+[x,p] = get_conformations( '((..[)).]' );
+assert( all( x == [0,1,2,1,0,1,0,-1,0]' ) );
+assert( all( p(:,1) == [7,6,0,0,9,2,1,0,5]' ) );
 
 

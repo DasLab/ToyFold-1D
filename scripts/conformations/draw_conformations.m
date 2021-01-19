@@ -1,6 +1,6 @@
-function draw_conformations( x, p, max_struct, sequence, E );
+function draw_conformations( x, p, max_struct, sequence, E, is_chainbreak );
 % draw_conformations( secstruct );
-% draw_conformations( x, p, max_struct, sequence );
+% draw_conformations( x, p, max_struct, sequence, E, is_chainbreak );
 %
 % Draw out coordinates for conformations.
 %
@@ -24,13 +24,14 @@ function draw_conformations( x, p, max_struct, sequence, E );
 
 if ischar( x )
     secstruct = x;
-    [x,p] = get_conformations( secstruct );
+    [x,p,is_chainbreak] = get_conformations( secstruct );
 end
 if ~exist( 'max_struct', 'var' ); max_struct = 8; end;
 if size(x,2) > max_struct
     x = x(:,1:max_struct);
     p = p(:,1:max_struct);
 end
+if ~exist('is_chainbreak','var') is_chainbreak = zeros(size(x,1),1); is_chainbreak(end) = 1; end;
 N = size( x, 1 ); % number of beads
 Q = size( x, 2 ); % number of conformations
 
@@ -43,7 +44,7 @@ for q = 1:Q
     stem_assignment = figure_out_stem_assignment( p(:,q) );
     z = 1;
     for n = 2:N
-        if stem_assignment(n) > 0 && stem_assignment(n) == stem_assignment(n-1)
+        if stem_assignment(n) > 0 && stem_assignment(n) == stem_assignment(n-1) && ~is_chainbreak(n-1)
             z(n) = z(n-1);
         else
             z(n) = z(n-1)+1;
@@ -59,8 +60,15 @@ for q = 1:Q
     end
     
     % draw backbone
-    plot( z, offset + x(:,q),'.-','linew',2); hold on
-
+    chainbreaks = find( is_chainbreak );
+    for i = 1:length(chainbreaks)
+        idx_start = 1;
+        if (i>1) idx_start = chainbreaks(i-1)+1; end;
+        idx_end = chainbreaks(i);
+        idx = idx_start:idx_end;
+        plot( z(idx), offset + x(idx,q),'.-','linew',2); hold on
+    end
+    
     if exist( 'sequence', 'var' ) && length( sequence ) > 0
         for n = 1:N
             rectangle( 'Position', [z(n)-0.25 offset+x(n,q)-0.25 0.5 0.5], 'Curvature',[1,1],...

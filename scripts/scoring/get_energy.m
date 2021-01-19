@@ -18,13 +18,9 @@ function E =  get_energy(x,p,is_chainbreak,params)
 if ~exist( 'params','var') params = get_default_energy_parameters(); end;
 assert( is_chainbreak(end) == 1 );
 
-d = get_directions_from_positions(x); % oh wait don't we need chainbreak info?
+d = get_directions_from_positions(x); 
 
-num_bends = score_bends(d, is_chainbreak);
+num_bends = score_bends_from_d(d, is_chainbreak);
 num_pairs = score_pairs(p);
 E = params.delta * num_bends + params.epsilon * num_pairs;
 
-function d = get_directions_from_positions(x);
-d = 1+0*x;
-d(1:end-1,:) = x(2:end,:)-x(1:end-1,:);
-assert( all( abs(d(:)) == 1 ) );

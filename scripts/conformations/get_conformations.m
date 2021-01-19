@@ -23,7 +23,7 @@ function [x,p,is_chainbreak,E] = get_conformations( secstruct, sequence, params)
 % OUTPUT
 %  x = [Nbeads x Nconformations] all sets of conformations.
 %        If there are no base pairs specified, should get
-%        2^(Nbeads-1). First position is always 0.   
+%        2^(Nbeads-2). First position is always 0.   
 %  p = [Nbeads x Nconformations] partners  (0 if bead is unpaired,
 %        otherwise index of partner from 1,... Nbeads )
 %  is_chainbreak = [Nbeads x 1] is the bead at the end of a chain?
@@ -94,11 +94,13 @@ for i = 2:N
         p(i,:) = partner(i);
     else
         q = size(x,2);
+        x_save = x; x_save(i,:) = 0; x = [];
         % new strand! can go anywhere! lots of new options to enumerate
         for xx = -(2*N-1):(2*N-1)
             for dd = [1 -1];
+                if is_chainbreak(i) & dd < 0; continue; end;
                 newblock = size(x,2) + [1:q];
-                x(:,newblock) = x(:,1:q);
+                x(:,newblock) = x_save(:,1:q);
                 d(:,newblock) = d(:,1:q);
                 p(:,newblock) = p(:,1:q);
                 x(i,newblock) = xx;

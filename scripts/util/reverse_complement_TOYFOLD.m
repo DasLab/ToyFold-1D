@@ -37,6 +37,8 @@ for k = 1:length( c_string )
     c2= 'A';
    case 'T'
     c2 = 'A';    
+   case ' '
+    c2 = ' ';    
   end
   c2_string( k ) = c2;
 end
