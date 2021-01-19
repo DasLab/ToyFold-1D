@@ -10,18 +10,33 @@ Testing calculations for simple Toyfold RNA folding model in 1D
 * Exact calculation of partition function and base pair probabilities, including pseudoknots.
 * Exact calculation of mutate-and-map-seq 'data'
 * Enumerative design of sequences that fold into target structures 
-* Checks of nearest-neighbor decomposition to quickly calculate free energies for nested secondary structures _[TODO -- see zetafold repository for example of motif decomposition script]_
-* Enumerative design of sequences that can carry out target computations as functions of input ligand concentrations _[TODO]_
-* Code up and check quick calculation of tertiary folding free energies _[TODO]_
 
 ## Getting started
 * Add to your MATLAB path the directory `scripts/` and all subdirectories 
 * To see enumeration over all states of a sequence designed to fold into a pseudoknot, try
 ```
-analyze_sequence('CGAAACCCGAGG');
+analyze_sequence('CGAAACCCGAGGU');
 ```
 You should get something like:
 ![analyze_sequence_example_output.png](assets/analyze_sequence_example_output.png)
+
+* Above assumes a model with base pair energy of -2 kT and bending penalty of +1 kT
+
+```
+params = get_default_energy_parameters()
+```
+
+* If we strengthen base pairs and penalize bending more, we get a more well-defined structure:
+
+```
+params = get_default_energy_parameters();
+params.epsilon = -3;
+params.delta = 2;
+analyze_sequence('CGAAACCCGAGGU');
+```
+
+![analyze_sequence_example_output_strongparams.png](assets/analyze_sequence_example_output_strongparams.png)
+
 
 * For some other fun examples, try a sequence that does not fold as cleanly into a pseudoknot:
 ``` 
@@ -65,9 +80,9 @@ enumerative_design( '((..[)).]' )
 * The Toyfold model is developed through Notes available in a Google Team Drive -- contact Rhiju for notes. 
 * The 'pencil-and-paper' variant of the model (modular helices, strong bending penalty) is being written up into a pedagogical paper by folks in the Das lab.
 * This repo is meant to help test rules even in the limit of weak bending penalties where there can be a *lot* of conformations that are hard to track with pencil and paper.
-* The key concept in this software is that the microstates of an RNA are defined by the positions of the nucleotides (x), the directions relative to the previous nucleotide (d), and their pairings (p). A secondary structure is actually a macrostate composed of multiple microstates. It would probably make sense to combine this information into a single object (conformation). Chainbreak information might be good to include there too...
-* There's one change here compared to the original Toyfold model -- the directions of the two chains going into each partner of a base pair are forced to be exactly opposite. This makes nearest-neighbor decomposition work out cleanly. An alternative may be to track one more DOF, the direction of the pair itself, and allow this to be distinct from the incoming strand directions.
+* The key concept in this software is that the microstates of an RNA are defined by the positions of the nucleotides (x) and their pairings (p). A secondary structure is actually a macrostate composed of multiple microstates. It would probably make sense to combine this information into a single object (conformation). Chainbreak information is also inferred.
 * The energy model has only two parameters at the moment, epsilon (the energy for forming a base pair) and delta (the energy for bending the chain). It would probably make sense to combine these parameters (and any others that may be added) to a single object (energy_model).
 * I haven't added in an energy term for harmonic fluctuations (though this would be straightforward to compute via log det M, where M is a connectivity matrix).
+* An early version of this repo, forked at [ToyFold-1D-Directed](https://github.com/rhiju/ToyFold-1D-Directed), explored forcing directions of the two chains going into each partner of a base pair to be exactly opposite. This makes nearest-neighbor decomposition work out cleanly, but produces non-intuitive constraints on possible structures. 
 
 

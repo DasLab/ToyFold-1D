@@ -1,6 +1,6 @@
-function draw_conformations( x, d, p, max_struct, sequence, E );
+function draw_conformations( x, p, max_struct, sequence, E );
 % draw_conformations( secstruct );
-% draw_conformations( x, d, p, max_struct, sequence );
+% draw_conformations( x, p, max_struct, sequence );
 %
 % Draw out coordinates for conformations.
 %
@@ -14,7 +14,6 @@ function draw_conformations( x, d, p, max_struct, sequence, E );
 %
 % (typical output from GET_CONFORMATIONS)
 %  x = [Nbeads x Nconformations] all sets of conformations.
-%  d = [Nbeads x Nconformations] input directions (array of +/-1's)
 %  p = [Nbeads x Nconformations] partners  (0 if bead is unpaired,
 %        otherwise index of partner from 1,... Nbeads )
 %  max_struct = maximum number of structures to plot.
@@ -25,12 +24,11 @@ function draw_conformations( x, d, p, max_struct, sequence, E );
 
 if ischar( x )
     secstruct = x;
-    [x,d,p] = get_conformations( secstruct );
+    [x,p] = get_conformations( secstruct );
 end
 if ~exist( 'max_struct', 'var' ); max_struct = 8; end;
 if size(x,2) > max_struct
     x = x(:,1:max_struct);
-    d = d(:,1:max_struct);
     p = p(:,1:max_struct);
 end
 N = size( x, 1 ); % number of beads

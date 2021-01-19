@@ -48,12 +48,11 @@ x_target = {}; d_target = {}; p_target = [];
 Z = []; Z_target = [];
 for q = 1:length( sequences )
     sequence = sequences{q};
-    [p_target(q),x{q},d{q},p{q}] = test_design(sequence,secstruct,params);
+    [p_target(q),x{q},p{q},is_chainbreak] = test_design(sequence,secstruct,params);
 end
 [p_sort,idx] = sort( -p_target );
 p_target = p_target( idx );
 x = x( idx );
-d = d( idx );
 p = p( idx );
 sequences = sequences(idx);
 
@@ -61,13 +60,14 @@ sequences = sequences(idx);
 colormap( 1 - gray(100));
 clf
 subplot(1,2,1);
+set(gcf,'pos',[94   618   444   217]);
 q = 1;
-imagesc( get_bpp(x{q},d{q},p{q},params),[0 1] );
+imagesc( get_bpp(x{q},p{q},is_chainbreak,params),[0 1] );
 title( ['Best design\newline',sequences{q},'\newline',num2str(p_target(q))] );
 
 subplot(1,2,2);
 q = length(x);
-imagesc(get_bpp(x{end},d{end},p{end},params),[0 1] );
+imagesc(get_bpp(x{end},p{end},is_chainbreak,params),[0 1] );
 title( ['Worst design\newline',sequences{end},'\newline',num2str(p_target(q))] );
 
 

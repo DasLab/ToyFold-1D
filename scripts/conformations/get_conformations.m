@@ -1,5 +1,5 @@
-function [x,d,p,E] = get_conformations( secstruct, sequence, params);
-% [x,d,p] = get_conformations( secstruct[, sequence, params] );
+function [x,p,is_chainbreak,E] = get_conformations( secstruct, sequence, params);
+% [x,p,is_chainbreak,E] = get_conformations( secstruct[, sequence, params] );
 %
 % Figure out all the conformations (bead positions)
 %  that are consistent with a secondary structure.
@@ -24,12 +24,13 @@ function [x,d,p,E] = get_conformations( secstruct, sequence, params);
 %  x = [Nbeads x Nconformations] all sets of conformations.
 %        If there are no base pairs specified, should get
 %        2^(Nbeads-1). First position is always 0.   
-%  d = [Nbeads x Nconformations] input directions (array of +/-1's)
 %  p = [Nbeads x Nconformations] partners  (0 if bead is unpaired,
 %        otherwise index of partner from 1,... Nbeads )
+%  is_chainbreak = [Nbeads x 1] is the bead at the end of a chain?
 %  E = [Nconformations] Energies for each conformation.
-% 
-% (C) R. Das, Stanford University, 2020
+%
+% (C) R. Das, Stanford University, 2020-21
+
 if ~exist( 'params','var') params = get_default_energy_parameters(); end;
 
 x = [];
@@ -52,6 +53,7 @@ if N == 0
     is_chainbreak = is_chainbreak_sequence;
     partner = zeros(1,N);
 end
+is_chainbreak(N) = 1;
 
 % without loss of generality,
 %  place first bead at x = 0,and point in positive direction. 
@@ -77,14 +79,18 @@ for i = 2:N
             % Forward:
             d(i,1:q) = 1;
             
-            % Backward (note that these are 'new' histories).
-            newblock = size(x,2) + [1:q];
-            x(:, newblock) = x(:, 1:q);
-            d(:, newblock) = d(:, 1:q);
-            p(:, newblock) = p(:, 1:q);
-            d(i, newblock) = -1;
+            if (i < N & ~is_chainbreak(i) )
+                % Backward (note that these are 'new' histories).
+                newblock = size(x,2) + [1:q];
+                x(:, newblock) = x(:, 1:q);
+                d(:, newblock) = d(:, 1:q);
+                p(:, newblock) = p(:, 1:q);
+                d(i, newblock) = -1;
+            end
         end
-        x(i,:) = x(i-1,:)+d(i,:);
+        % in ToyFold1D-directed, this used to be less intuitive?
+        % x(i,:) = x(i-1,:)+d(i,:);
+        x(i,:) = x(i-1,:)+d(i-1,:);
         p(i,:) = partner(i);
     else
         q = size(x,2);
@@ -103,11 +109,10 @@ for i = 2:N
     end
     
     if ~isempty( stem_assignment )
-        % filter trajectories that obey user-inputted pairs -- positions are at same level,
-        %   and going in opposite directions
+        % filter trajectories that obey user-inputted pairs -- positions are at same level
         if partner(i) == 0; continue; end;
         if partner(i) > i;  continue; end;
-        gp = find( x(i,:) == x(partner(i),:) & d(i,:) == -d(partner(i),:) );
+        gp = find( x(i,:) == x(partner(i),:) );
         x = x(:,gp);
         d = d(:,gp);
         p = p(:,gp);
@@ -131,15 +136,15 @@ for i = 2:N
             pnew = [pnew, pm];
 
             % look for partners based on matching position
-            sequence_match =  (sequence(1:i) == 'N' | sequence(i) == 'N' | ...
-                (sequence(1:i) == 'A' & sequence(i) == 'U') | ...
-                (sequence(1:i) == 'U' & sequence(i) == 'A') | ...
-                (sequence(1:i) == 'G' & sequence(i) == 'C') | ...
-                (sequence(1:i) == 'C' & sequence(i) == 'G') | ...
-                (isstrprop( sequence(1:i) ,'lower' ) & ...
+            sequence_match =  (sequence(1:i-1) == 'N' | sequence(i) == 'N' | ...
+                (sequence(1:i-1) == 'A' & sequence(i) == 'U') | ...
+                (sequence(1:i-1) == 'U' & sequence(i) == 'A') | ...
+                (sequence(1:i-1) == 'G' & sequence(i) == 'C') | ...
+                (sequence(1:i-1) == 'C' & sequence(i) == 'G') | ...
+                (isstrprop( sequence(1:i-1) ,'lower' ) & ...
                 isstrprop( sequence(i), 'lower' ) & ...
-                sequence(1:i) == sequence(i) ) );
-            partners = find( xm == xm(i) & ~pm & dm ~= dm(i) & sequence_match' );
+                sequence(1:i-1) == sequence(i) ) );
+            partners = find( xm(1:i-1) == xm(i) & ~pm(1:i-1) & sequence_match' );
             for pp = partners'
                 pm = p(:,m);
                 pm(i)  = pp;
@@ -157,28 +162,11 @@ for i = 2:N
 end
 
 % re-order trajectories, sorted by the number of bends
-E =  get_energy(d,p,params);
+E =  get_energy(x,p,is_chainbreak,params);
 [E,idx] = sort( E );
 
 x = x(:,idx);
 d = d(:,idx);
 p = p(:,idx);
-
-% 
-% 
-% function sequence_num = convert_sequence_to_numbers(sequence)
-% % may be unnecessary
-% sequence_num = [];
-% for i = 1:length(sequence)
-%     switch upper( sequence(i) )
-%         case 'N'
-%             sequence_num(i) = -1;
-%         case 'A'
-%             sequence_num(i) = 0;
-%         case 'U'
-%             sequence_num(i) = 1;
-%     end
-% end
-% sequence_num = sequence_num;
 
 

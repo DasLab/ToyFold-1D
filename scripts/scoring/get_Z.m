@@ -1,5 +1,5 @@
-function [Z,conf_prob] = get_Z(x,d,p,params);
-% [Z,conf_prob] = get_Z(x,d,p,epsilon,delta);
+function [Z,conf_prob] = get_Z(x,p,is_chainbreak,params);
+% [Z,conf_prob] = get_Z(x,p,is_chainbreak,params);
 %
 % Partition function calculation.
 %
@@ -7,9 +7,9 @@ function [Z,conf_prob] = get_Z(x,d,p,params);
 %  x = [Nbeads x Nconformations] all sets of conformations.
 %        If there are no base pairs specified, should get
 %        2^(Nbeads-1). First position is always 0.   
-%  d = [Nbeads x Nconformations] input directions (array of +/-1's)
 %  p = [Nbeads x Nconformations] partners  (0 if bead is unpaired,
 %        otherwise index of partner from 1,... Nbeads )
+%  is_chainbreak = [Nbeads x 1] is the bead at the end of a chain?
 %  params = Energy parameter values for delta, epsilon, etc. [MATLAB struct]
 %
 % OUTPUT
@@ -25,7 +25,7 @@ function [Z,conf_prob] = get_Z(x,d,p,params);
 
 if ~exist( 'params','var') params = get_default_energy_parameters(); end;
 
-E = get_energy(d,p,params);
+E = get_energy(x,p,is_chainbreak,params);
 Z = sum( exp( -E ) );
 conf_prob = exp(-E)/Z;
 

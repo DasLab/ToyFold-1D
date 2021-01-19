@@ -9,3 +9,4 @@ for i = 1:length( secstruct )
         is_chainbreak = [ is_chainbreak, 0 ];
     end
 end
+is_chainbreak = is_chainbreak';
