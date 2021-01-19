@@ -1,0 +1,91 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red27\green31\blue34;\red2\green128\blue9;}
+{\*\expandedcolortbl;;\cssrgb\c14118\c16078\c18039;\csgenericrgb\c784\c50196\c3529;}
+\margl1440\margr1440\vieww15260\viewh18040\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs28 \cf0 Revisiting ToyFold-1D\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 19 Jan, 2021\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 https://github.com/DasLab/ToyFold-1D\
+\
+\pard\pardeftab720\sl380\partightenfactor0
+
+\f2\b0\fs27\fsmilli13600 \cf2 \expnd0\expndtw0\kerning0
+params = get_default_energy_parameters();\
+params.epsilon = -3;\
+params.delta = 2;\
+analyze_sequence('CGAAACCCGAGGU',params);\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs28 \cf0 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b0\fs24 \cf0 {{\NeXTGraphic analyze_sequence_example_output_strongparams.png \width8560 \height8000 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs28 \cf0 \
+\'95 Was useful last year in thinking through exactness of nearest neighbor rules.\
+\'95 Raises prospect of generating 10^5 \'91gold standard\'92 MFE structures and BPP  which could be used for testing neural network architectures.\
+\'95 including \'93tensor field networks\'94 with signed features, and transformers to auto build coordinates of MFE.\
+\
+I got rid of \'91direction\'92 vectors and constraint that base pairs must only form between residues moving in opposite direction. This was different from pencil-and-paper model and imposed weird constraints on structure (Forked that repo out to https://github.com/rhiju/ToyFold-1D-directed).\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs24 \cf0 \ul \ulc0 Test pseudo knot frequency\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ulnone I actually coded this up in March 2020 \'97 but didn\'92t preserve notes.\
+Now running again in new model\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-19 at 1.28.26 PM.png \width7980 \height8520 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+Took a long time \'97 only 18 nts, but took:\
+  Elapsed time is 79.262615 seconds.\
+3060413 conformations!\
+Also note that there\'92s degeneracy lowest energy conformations.\
+Should be able to reduce length of first loop \'97 no longer have that funny directionality constraint:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-19 at 1.33.15 PM.png \width7920 \height8660 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
+\
+Filter for pseudo knot conformations only \'97 yup that still works:\
+{{\NeXTGraphic Screen Shot 2021-01-19 at 1.34.26 PM.png \width3140 \height8400 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\
+\ul Get data for 14-nt  random sequences:\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 \ulnone params.epsilon = -2; params.delta = 5; \cf3 % try to get more cooperativity\
+\
+14-nt\
+Yea, not getting too many pseudo knots. This is a good starting point for generating a lot of train/test data?
+\fs24 \cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-19 at 1.36.32 PM.png \width7700 \height8320 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Each sequence is taking 1-3 seconds.\
+\
+4^14 = 268,435,456\
+\
+If I can get under 1 sec, would take ~30 hours to generate 10^5 training data sets.\
+\
+Profile: analyze_sequence( 'AGCGGACAGUCUGA',params,0);\
+Figured out some computations that weren\'92t necessary based on profiling \'97 got ~2x speedup to ensure ~1 sec time.\
+\
+\
+}

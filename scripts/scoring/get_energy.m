@@ -15,7 +15,7 @@ function E =  get_energy(x,p,is_chainbreak,params)
 % E = [Nconformations] energies for each conformation 
 %
 % (C) R. Das, Stanford University 2020-21
-if ~exist( 'params','var') params = get_default_energy_parameters(); end;
+%if ~exist( 'params','var') params = get_default_energy_parameters(); end;
 assert( is_chainbreak(end) == 1 );
 
 d = get_directions_from_positions(x); 

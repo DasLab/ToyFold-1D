@@ -12,7 +12,7 @@ function [x,p,is_chainbreak,E] = analyze_sequence( sequence, params, calc_m2 );
 %
 % (C) R. Das, Stanford University
 
-if ~exist( 'params','var') params = get_default_energy_parameters(); end;
+if ~exist( 'params','var') | isempty(params); params = get_default_energy_parameters(); end;
 if ~exist( 'calc_m2','var') calc_m2 = 1; end;
 N = length( sequence );
 
