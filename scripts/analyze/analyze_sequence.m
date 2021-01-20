@@ -1,6 +1,5 @@
-function [x,p,is_chainbreak,E] = analyze_sequence( sequence, params, calc_m2 );
-% analyze_sequence( sequence );
-% analyze_sequence( sequence, params, calc_m2 );
+function [x,p,is_chainbreak,E,bpp] = analyze_sequence( sequence, params, calc_m2 );
+% [x,p,is_chainbreak,E,bpp] = analyze_sequence( sequence [, params, calc_m2] );
 % 
 % Analyze and plot lowest energy conformations, base pair probability
 %  matrix, and simulated M2seq data for sequence
@@ -10,7 +9,9 @@ function [x,p,is_chainbreak,E] = analyze_sequence( sequence, params, calc_m2 );
 %  params = Energy parameter values for delta, epsilon, etc. [MATLAB struct]
 %  calc_m2 = do mutate-and-map simulation [default 1]
 %
-% (C) R. Das, Stanford University
+% OUTPUT
+%
+% (C) R. Das, Stanford University 2020-21
 
 if ~exist( 'params','var') | isempty(params); params = get_default_energy_parameters(); end;
 if ~exist( 'calc_m2','var') calc_m2 = 1; end;
