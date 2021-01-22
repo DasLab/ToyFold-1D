@@ -19,8 +19,7 @@ Maybe we start in MATLAB, and then invest an afternoon later on to carry out to 
 \f1\b0 {{\NeXTGraphic Screen Shot 2021-01-21 at 9.14.04 AM.png \width2480 \height2460 \appleattachmentpadding0 \appleembedtype0 \appleaqc
 }¬}\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf0 \
+\
 
 \f0\b Plans, from easy to hard:\
 
@@ -33,4 +32,341 @@ Maybe we start in MATLAB, and then invest an afternoon later on to carry out to 
 [ ] sequence \'97> bpp. [dynamic programming + bonuses.]\
 [ ] sequence \'97> MFE [transformer]\
 [ ] sequence \'97> MFE [transformer with signed features (\'91equivariance\'92)]\
+\
+Just predict energy. Should be easy \'97 can use a linear model! But MATLAB training diverges to NaN\
+Take x and p features (14+14=28), and fit to E\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     featureInputLayer([28])
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.12.20 PM.png \width11180 \height11500 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\
+Drop the ReLU:\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     featureInputLayer([28])
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];\
+
+\fs24 Actually this is OK, though really should go to error of zero.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.14.14 PM.png \width7060 \height11360 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+Try 1D CNN. \
+Pretend input is 2 layers, \'9114x1 images\'92.\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 1 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],2)
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];\
+
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.15.59 PM.png \width7920 \height6260 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 \
+Maybe too many params in fullyConnected \'97 try to globalAverage before fully connected \'85 that should reflect the idea that we\'92re just summing bend energy (based on x), summing  pairs (based on p). \
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 1 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],2)
+\fs24 \
+
+\fs20     globalAveragePooling2dLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 \
+Uh not much of a boost:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs24 \cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.19.03 PM.png \width8400 \height6000 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+Try \'91deep\'92 net?\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 1 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     globalAveragePooling2dLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.22.55 PM.png \width13660 \height10060 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Try \'91deep\'92 net with 10 features rather than 2 in each layer.\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 1 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     globalAveragePooling2dLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 \
+Yea this is on the right track.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs24 \cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.25.40 PM.png \width12880 \height9120 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.27.55 PM.png \width3960 \height3760 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+How about 3 layers?\
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 1 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 1],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     globalAveragePooling2dLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.30.25 PM.png \width11700 \height6900 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+In above, encoding of p is a bit wonky \'97 its the partner.\
+\
+
+\f0\b \ul How about a legit 2D convnet?\
+
+\f1\b0 \ulnone Reshape input to 3 layers: \
+ \'95 1 layer with x tiled row-wise\
+ \'95 1 layer with x tiled column-wise \
+ \'95 P = 1,0 matrix.\
+\
+train_idx = [1:500];\
+test_idx = [9001:10000];\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 3])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Note \'97 I tried some architectures with fewer layers or no non-linearities and didn\'92t see success.\
+Looks OK \'97 try more features in each layer, deeper net?\
+Note also train/test discrepancy! Looks like overfitting May need more data.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.34.42 PM.png \width11120 \height9020 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 3])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Repeat above with 5000 training examples instead of 500. Looks great!\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 6.11.22 PM.png \width13960 \height6900 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 6.59.38 PM.png \width3840 \height3680 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
 }
