@@ -1,8 +1,9 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2513
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww14580\viewh13900\viewkind0
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red14\green0\blue255;\red170\green4\blue249;}
+{\*\expandedcolortbl;;\csgenericrgb\c5490\c0\c100000;\csgenericrgb\c66667\c1569\c97647;}
+\margl1440\margr1440\vieww19560\viewh18040\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
 \f0\b\fs24 \cf0 Let\'92s train some networks.\
@@ -56,7 +57,8 @@ Take x and p features (14+14=28), and fit to E\
 \fs24 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 \cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 5.12.20 PM.png \width11180 \height11500 \appleattachmentpadding0 \appleembedtype0 \appleaqc
-}¬}\
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
 \
 Drop the ReLU:\
 \pard\pardeftab720\partightenfactor0
@@ -113,8 +115,7 @@ Pretend input is 2 layers, \'9114x1 images\'92.\
 \fs20 \cf0 \
 Maybe too many params in fullyConnected \'97 try to globalAverage before fully connected \'85 that should reflect the idea that we\'92re just summing bend energy (based on x), summing  pairs (based on p). \
 \
-\pard\pardeftab720\partightenfactor0
-\cf0 layers = [ 
+layers = [ 
 \fs24 \
 
 \fs20     imageInputLayer([14 1 2])
@@ -134,9 +135,8 @@ Maybe too many params in fullyConnected \'97 try to globalAverage before fully c
 
 \fs20     ];
 \fs24 \
-\pard\pardeftab720\partightenfactor0
 
-\fs20 \cf0 \
+\fs20 \
 Uh not much of a boost:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
@@ -183,8 +183,7 @@ Try \'91deep\'92 net?\
 }¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 \
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-\cf0 Try \'91deep\'92 net with 10 features rather than 2 in each layer.\
+Try \'91deep\'92 net with 10 features rather than 2 in each layer.\
 \pard\pardeftab720\partightenfactor0
 
 \fs20 \cf0 layers = [ 
@@ -216,9 +215,8 @@ Try \'91deep\'92 net?\
 
 \fs20     ];
 \fs24 \
-\pard\pardeftab720\partightenfactor0
 
-\fs20 \cf0 \
+\fs20 \
 Yea this is on the right track.\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
@@ -278,10 +276,12 @@ How about 3 layers?\
 \
 In above, encoding of p is a bit wonky \'97 its the partner.\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b \ul How about a legit 2D convnet?\
+\f0\b \cf0 \ul \ulc0 How about a legit 2D convnet?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f1\b0 \ulnone Reshape input to 3 layers: \
+\f1\b0 \cf0 \ulnone Reshape input to 3 layers: \
  \'95 1 layer with x tiled row-wise\
  \'95 1 layer with x tiled column-wise \
  \'95 P = 1,0 matrix.\
@@ -355,7 +355,7 @@ Note also train/test discrepancy! Looks like overfitting May need more data.\
 \fs20     ];
 \fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-\cf0 \
+\cf0 Amazingly, just 2 features in each layer.\
 Repeat above with 5000 training examples instead of 500. Looks great!\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 {{\NeXTGraphic Screen Shot 2021-01-21 at 6.11.22 PM.png \width13960 \height6900 \appleattachmentpadding0 \appleembedtype0 \appleaqc
@@ -367,6 +367,413 @@ Repeat above with 5000 training examples instead of 500. Looks great!\
 }¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 \
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+Gets even better if we add a layer.\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 2])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 \
+Nice!
+\f1\b0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 12.46.54 PM.png \width13440 \height8140 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\ul 27 Jan, 2021\
+\ulnone Can the convnet do more?\
+Can we infer energy with just conformation? I.e., no pairing info.\
+Uh no\'85 maybe it needs sequence to figure out pairing.  Following with two hidden conv2d layers\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 10.06.55 AM.png \width14080 \height9020 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+Doesn\'92t get better with 3 layers.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 12.53.17 PM.png \width13320 \height7800 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+How about the opposite \'97 if we know pairing, is that enough to get energy?\
+YEs, sort of. Clearly overfitting know \'97 look at training vs. test error. \
+Is that because MFE conformation actually is degenerate in energy given pairing? 
+\f0\b Doesn\'92t totally make sense to me.\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 3])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 10.13.18 AM.png \width11980 \height9440 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+More layers? More features? 
+\f2\i Yes, actually that does it! 
+\f1\i0 \
+The extra layers build up mer complex features that appear able to infer the structure information (needed to estimate bending component of energy):
+\f2\i \
+\pard\pardeftab720\partightenfactor0
+
+\f1\i0\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 1])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 10.23.51 AM.png \width12700 \height5860 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 10.24.48 AM.png \width3620 \height3560 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+Revisit predicting Energy from conformation (x) and 
+\f2\i sequence. 
+\f1\i0 I.e. ask for pairings\
+
+\f0\b Still doesn\'92t work? 
+\f1\b0 But it should be trivial to figure out pairings.
+\f0\b \
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 10])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 12.53.17 PM.png \width13320 \height7800 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 10])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 4.37.59 PM.png \width13240 \height4960 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+Oh come on, this has to work. Neural net just has to learn that A/U and G/C at the same level are likely to pair. How hard is that? Should be easy to encode into a convnet.\
+Yes \'97 just had to increase # early layers:\
+The idea is that we need more layers to ensure we remember the X-data while learning (in early layers) to infer pairing.\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf2 end
+\fs24 \cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 10])
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],10)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([3 3],2)
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     fullyConnectedLayer(1)
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 4.53.58 PM.png \width11480 \height7320 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+Tried to rerun again, and it didn\'92t train!?\
+And, argh I forgot to save the net above.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 7.12.22 PM.png \width14380 \height9140 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+Should be able to directly train a neural net to fit P based on sequence and X:\
+\
+Check that X levels match (channels 1 and 2 for x at 1 and x at 2)  and\
+ that sequences are allowed to form base pairs (channels 3-10 for A at 1-U at 2, etc.):\
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 imagesc(D2(:,:,1,10)==D2(:,:,2,10) & \cf2 ...
+\fs24 \cf0 \
+
+\fs20     ( (D2(:,:,3,10)==1 & D2(:,:,10,10)==1) | \cf2 ...
+\fs24 \cf0 \
+
+\fs20       (D2(:,:,5,10)==1 & D2(:,:,8,10)==1) | \cf2 ...
+\fs24 \cf0 \
+
+\fs20       (D2(:,:,7,10)==1 & D2(:,:,6,10)==1) | \cf2 ...
+\fs24 \cf0 \
+
+\fs20       (D2(:,:,9,10)==1 & D2(:,:,4,10)==1) ) );\
+\
+This is basically a bunch of \'931x1\'94 convs
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 7.34.08 PM.png \width15060 \height6640 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+However, not able to train\
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 layers = [ 
+\fs24 \
+
+\fs20     imageInputLayer([14 14 10])
+\fs24 \
+
+\fs20     convolution2dLayer([1 1],10,\cf3 'Padding'\cf0 ,\cf3 'Same'\cf0 ,\cf3 'Name'\cf0 ,\cf3 'convInp'\cf0 )
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([1 1],10,\cf3 'Padding'\cf0 ,\cf3 'Same'\cf0 ,\cf3 'Name'\cf0 ,\cf3 'conv2'\cf0 )
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([1 1],10,\cf3 'Padding'\cf0 ,\cf3 'Same'\cf0 ,\cf3 'Name'\cf0 ,\cf3 'conv2'\cf0 )
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([1 1],10,\cf3 'Padding'\cf0 ,\cf3 'Same'\cf0 ,\cf3 'Name'\cf0 ,\cf3 'conv2'\cf0 )
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     convolution2dLayer([1 1],10,\cf3 'Padding'\cf0 ,\cf3 'Same'\cf0 ,\cf3 'Name'\cf0 ,\cf3 'conv2'\cf0 )
+\fs24 \
+
+\fs20     reluLayer
+\fs24 \
+
+\fs20     regressionLayer
+\fs24 \
+
+\fs20     ];
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2021-01-27 at 7.48.14 PM.png \width15940 \height9840 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
 }
