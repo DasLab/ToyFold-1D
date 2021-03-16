@@ -1,7 +1,7 @@
 # Toyfold 1D
 Testing calculations for simple Toyfold RNA folding model in 1D
 
-(C) R. Das, Stanford University 2020
+(C) R. Das, Stanford University 2020, 2021
 
 ## Features
 * Brute-force enumeration of bead-based model for RNA folding
@@ -10,6 +10,9 @@ Testing calculations for simple Toyfold RNA folding model in 1D
 * Exact calculation of partition function and base pair probabilities, including pseudoknots.
 * Exact calculation of mutate-and-map-seq 'data'
 * Enumerative design of sequences that fold into target structures 
+* Benchmarks for neural network architectures with unambiguous ground truth -- check out [benchmarks](benchmarks), specifically [das\_toyfold1d\_10k\_14mers.csv](benchmarks/das_toyfold1d_10k_14mers.csv.gz)
+
+**Note**: This repo was written in MATLAB for semi-historical reasons; Das lab is moving to a numpy/scipy port in the [pyFold-1D](https://github.com/DasLab/pyFold-1D) repo!
 
 ## Getting started
 * Add to your MATLAB path the directory `scripts/` and all subdirectories 

@@ -50,3 +50,26 @@ for n = 1:25
     end
     title( sequences{n} );
 end
+
+%% output .csv of data
+filename = 'das_toyfold1d_10k_14mers.csv';
+fid = fopen( filename, 'w' );
+fprintf('\n');
+fprintf(fid,'sequence');
+for n = 1:N; fprintf(fid,',x_%02d',n); end;
+for n = 1:N; fprintf(fid,',p_%02d',n); end;
+for m = 1:N; for n = 1:N; fprintf(fid,',bpp_%02d_%02d',m,n); end; end;
+fprintf(fid,'\n');
+for i = 1:Ndata
+    fprintf(fid,'%s',sequences{i});
+    x = all_x(:,i);
+    p = all_p(:,i);
+    bpp = all_bpp(:,:,i);
+    for n = 1:N; fprintf(fid,',%d',x(n)); end;
+    for n = 1:N; fprintf(fid,',%d',p(n)); end;
+    for m = 1:N; for n = 1:N; fprintf(fid,',%6.4f',bpp(m,n)); end; end;
+    fprintf(fid,'\n');
+end 
+fclose( fid);
+fprintf( '\nCreated: %s.\n',filename);
+
