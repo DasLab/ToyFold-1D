@@ -10,7 +10,7 @@ Testing calculations for simple Toyfold RNA folding model in 1D
 * Exact calculation of partition function and base pair probabilities, including pseudoknots.
 * Exact calculation of mutate-and-map-seq 'data'
 * Enumerative design of sequences that fold into target structures 
-* Benchmarks for neural network architectures with unambiguous ground truth -- check out [benchmarks](benchmarks), specifically [das\_toyfold1d\_10k\_14mers.csv](benchmarks/das_toyfold1d_10k_14mers.csv.gz)
+* Benchmarks for neural network architectures with unambiguous ground truth -- check out [benchmarks](benchmarks), specifically [README_benchmark.md](benchmarks/README_benchmark.md)
 
 **Note**: This repo was written in MATLAB for semi-historical reasons; Das lab is moving to a numpy/scipy port in the [pyFold-1D](https://github.com/DasLab/pyFold-1D) repo!
 
